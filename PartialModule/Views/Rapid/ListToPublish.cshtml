@@ -1,0 +1,79 @@
+﻿<h2>发布列表</h2>
+@model List<string>
+
+<div class="DataList">
+    @{
+        foreach (var item in Model)
+        {
+            <text>@item</text><br />
+        }
+    }
+</div>
+
+<div>&nbsp;</div>
+<button type="button" class="btn-glow Release btn_jb_color">
+    <i class="icon-bookmark"></i> 清除最后一条
+</button>
+
+<button type="button" class="btn-glow lookback btn_jb_color">
+    <i class="icon-bookmark"></i> 数据回看
+</button>
+
+<script type="text/javascript">
+    $(".Release").click(function () {
+        $.ajax({
+            url: '@Url.Action("RemoveLast", "Rapid")',//控制器活动,返回一个分部视图,并且给分部视图传递数据.
+            data: '',
+            type: 'POST',
+            contentType: 'application/json;charset=utf-8',//数据类型必须有
+            success: function (data) //成功后的回调方法
+            {
+                $(".DataList").html("");
+                var datas = data.result;
+                for (let item in datas) {
+                    console.log(item);
+                    $(".DataList").append(datas[item]);
+                }; 
+                //$("#myDiv").html(data);//data--就是对应的分部视图页面内容.
+               // alert(data.result)//弹出框
+            },
+            error: function (data) {
+                alert("失败:" + data[0])//弹出框
+            }
+
+        });
+    });
+
+    $(".lookback").click(function () {
+        //$(".zckf").click();
+
+        // 直接切换选中状态
+        // 通过ajax更新对应标签下的内容
+        var postData = new Object();
+        postData.from = '@Html.ViewContext.RouteData.Values["controller"]';
+        postData.data = "发布列表中看到的数据";
+
+
+        //alert("Not Implement Exception");
+        $.ajax({
+            url: '@Url.Action("Index", "ZC")',//控制器活动,返回一个分部视图,并且给分部视图传递数据.
+            data: JSON.stringify(postData),
+            type: 'POST',
+            contentType: 'application/json;charset=utf-8',//数据类型必须有
+            success: function (data) //成功后的回调方法
+            {
+                $("#ZCKF").html(data);//data--就是对应的分部视图页面内容.
+                $(".zckf").parent().addClass("active");
+                $("#ZCKF").addClass(" in active");
+                $("#KF_list").removeClass(" in active");
+                $(".kf_list").parent().removeClass("active");
+               // alert(data.result)//弹出框
+            },
+            error: function (data) {
+                alert("失败:" + data[0])//弹出框
+            }
+        
+        });
+    });
+</script>
+

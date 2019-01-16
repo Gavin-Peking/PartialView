@@ -1,0 +1,91 @@
+﻿@using System.Dynamic
+@{
+    ViewBag.Title = "快发数据";
+}
+<input id="PageIndex" value="@Html.ViewContext.RouteData.Values["controller"]" hidden />
+<ul id="myTab" class="nav nav-tabs" style="margin-top:70px;margin-left:3%;margin-bottom: 0px;">
+    <li class="active"><a class="zckf" href="#ZCKF" data-toggle="tab">自采数据</a></li>
+    <li><a class="tckf" href="#TCKF" data-toggle="tab">统采数据</a></li>
+    <li><a class="kf_list" href="#KF_list" data-toggle="tab">发布列表</a></li>
+    <li><a class="kf_log" href="#KF_log" data-toggle="tab">历史记录</a></li>
+    <li><a class="kf_log_del" href="#KF_log_del" data-toggle="tab">删除日志</a></li>
+</ul>
+
+<div class="content" style="margin-top:0px;padding: 0 0 30px;background-color: #f7f7f7;">
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade in active" id="ZCKF"></div>
+        <div class="tab-pane fade" id="TCKF"></div>
+        <div class="tab-pane fade" id="KF_list"></div>
+        <div class="tab-pane fade" id="KF_log">历史记录</div>
+        <div class="tab-pane fade" id="KF_log_del">删除日志</div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $(".zckf").click();
+    });
+    $('#myTab a').on('click', function (e) {
+        var target = e.currentTarget.className;
+        switch (target)
+        {
+            case 'zckf':
+                var postData = new Object();
+                postData.from = $("#PageIndex").val();
+                postData.data = null;
+                $.ajax({
+                    url: "/ZC/Index",
+                    data: JSON.stringify(postData),//传给服务器的数据(即后台AddUsers()方法的参数,参数类型要一致才可以)
+                    type: 'POST',
+                    contentType: 'application/json;charset=utf-8',//数据类型必须有
+                    success: function (data) //成功后的回调方法
+                    {
+                        $("#ZCKF").html(data)
+                    },
+                    error: function (data) {
+                        alert("失败:" + data[0])//弹出框
+                    }
+
+                });
+                break;
+            case 'tckf':
+                $.ajax({
+                    url: "/TC/Index",
+                    data: null,//传给服务器的数据(即后台AddUsers()方法的参数,参数类型要一致才可以)
+                    type: 'GET',
+                    //contentType: 'application/json;charset=utf-8',//数据类型必须有
+                    success: function (data) //成功后的回调方法
+                    {
+                        $("#TCKF").html(data);
+                    },
+                    error: function (data) {
+                        alert("失败:" + data[0])//弹出框
+                    }
+
+                });
+                break;
+            case 'kf_list':
+                // 清空其他模块内容，避免脚本、样式等相互影响
+                // 加载快发列表模块
+                $.ajax({
+                    url: "/Rapid/ListToPublish",
+                         data: '',//传给服务器的数据(即后台AddUsers()方法的参数,参数类型要一致才可以)
+                         type: 'GET',
+                         success: function (data) //成功后的回调方法
+                         {
+                             $("#KF_list").html(data)
+                         },
+                         error: function (data) {
+                             alert("失败:" + data[0])//弹出框
+                         }
+
+                 });
+                break;
+            //case 'kf_log':
+            //    $("#KF_log").html("历史记录");
+            //    break;
+            //case 'kf_log_del':
+            //    $("#KF_log_del").html("删除日志");
+            //    break;
+        }
+    });
+</script>

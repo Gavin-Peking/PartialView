@@ -1,0 +1,346 @@
+﻿<h2>自采数据</h2>
+<div class="row-fluid form-wrapper" style="background-color: #fdfdfd;">
+
+    @{
+        var data = ViewBag.Data as object;
+        if (data == null)
+        {
+            <div class="content_right" style="width:100%;font-size:15px;border: 1px solid #dcd8d8;background-color: #fdfdfd;">
+                <div class="filter_box" style="margin: 3px 6px 15px;">
+                    <div class="filter_list">
+                        <h6>资源类型：</h6>
+                        <div class="zc_list_Type list_Type">
+                            <a value="" class="on dbfl">全部</a>
+                            <a value="企业动态">企业动态</a><a value="党政领导言论">党政领导言论</a><a value="协会动态">协会动态</a><a value="政策解读">政策解读</a><a value="行业会议">行业会议</a><a value="行业新闻">行业新闻</a><a class="showall" style="cursor:pointer;display:none;"><span>展开</span>&gt;&gt;</a>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="filter_list">
+                        <h6 id="title_selTask">任务名称：</h6>
+                        <div class="ui-select">
+                            <select id="sel_Task" class="js-example-basic-single select2-hidden-accessible" onchange="selTaskChange()" data-select2-id="sel_Task" tabindex="-1" aria-hidden="true">
+                                <option data-select2-id="2"></option>
+                                <option value="T00006050">数据处理2</option>
+                                <option value="T00006051">数据处理3</option>
+                                <option value="T00006057">数据处理5</option>
+                                <option value="T00011375">西藏自治区住建部</option>
+                                <option value="T00013197">数据处理6</option>
+                                <option value="T00013199">数据处理7</option>
+                                <option value="T00018353">行业会议</option>
+                            </select>
+                            <span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="1" style="width: 200px; margin: -1px;">
+                                <span class="selection">
+                                    <span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-sel_Task-container">
+                                        <span class="select2-selection__rendered" id="select2-sel_Task-container" role="textbox" aria-readonly="true" title=""></span>
+                                        <span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span>
+                                    </span>
+                                </span>
+                                <span class="dropdown-wrapper" aria-hidden="true"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="zc_initHide">
+                <div style="width:100%;font-size:15px;background-color: #f7f7f7;height: 42px;padding-top: 10px;">
+                    <span class="btn btn-default btn_batch zc_DelData" title="批量删除">批量删除</span>
+                    <span class="btn btn-default btn_batch zc_batch" title="批量编辑">批量编辑</span>
+                    @{
+                        if (ViewBag.From == "Rapid")
+                        {
+                            <span style="color: #8c8a8a;padding: 5px 20px;font-size: 15px;font-family: cursive;">提示：题名、发布日期须不为空;"发布列表"筛选数据总量上限为200条!</span>
+                        }
+                    }
+                </div>
+                <div class="row-fluid form-wrapper zc_div_batch"
+                     style="display:none;border: 1px solid rgb(214, 229, 226);padding: 20px 70px 10px;border-radius: 5px;box-shadow: 2px 2px #e3e0e0;">
+                    <div class="span8" style="width:100%;">
+                        <div id="div_filter_list">
+                            <div class="filter_box">
+                                <div class="zc_div_filter" style="display:none;">
+                                    <div class="filter_list" style="display:block; min-height: 62px;padding-top: 16px;">
+                                        <h6>字段：</h6>
+                                        <div class="ui-select" style="margin-right: 20px;float:left;">
+                                            <select class="sel_Feild zc_group_sel"></select>
+                                        </div>
+                                        <h6>方法：</h6>
+                                        <div class="ui-select" style="margin-right: 20px;float:left;">
+                                            <select class="selMethod">
+                                                <option value="value">固定值</option>
+                                                <option value="substring">截取值</option>
+                                                <option value="vancat">拼接值</option>
+                                                <option value="replace">查找替换</option>
+                                                @*<option value="rex">正则表达式</option>*@
+                                                <option value="empty">是空的</option>
+                                            </select>
+                                        </div>
+                                        <a class="btn-flat small zc_btn_red_filter" style="margin-bottom: 7px;margin-left: 10px;margin-right: 12px;color:white;">-</a>
+                                        <a class="btn-flat small zc_btn_add_filter" style="margin-bottom: 7px;margin-right: 12px;color:white;">+</a>
+                                    </div>
+                                    <input class='span8 inputword' type='text' style='display:none;/*width:17%; height: 25px; min-height: 20px;float: left;margin-right: 5px;background-color: #ffffff;border: 1px solid #cccccc;color: #555555;vertical-align: middle;-webkit-border-radius: 4px;-moz-border-radius: 4px;border-radius: 4px;margin-left:0px;height:27px;*/' />
+                                    <div class="params" style="height:60px;">
+                                        <div class="filter_list form1" style="display:block; min-height: 62px;padding-top: 16px;">
+                                            <h6>参数：</h6>
+                                            <input class="span8 " type="text" />
+                                        </div>
+                                        <div class="filter_list form2" style="display:none; min-height: 62px;padding-top: 16px;">
+                                            <h6>参数：</h6>
+                                            <div class="ui-select" style="margin-right: 20px;float:left;">
+                                                <select class="sel_Feild"></select>
+                                            </div>
+                                            <h6>起始位置：</h6>
+                                            <input class='span8 input_Num' type='number' placeholder="请输入数字" min="0" />
+                                            <h6>截取长度：</h6>
+                                            <input class='span8 input_Num' type='number' placeholder="输入数字0截取至末尾" min="0" />
+                                        </div>
+                                        <div class="filter_list form3" style="display:none; min-height: 62px;padding-top: 16px;">
+                                            <h6>参数：</h6>
+                                            <div class="ui-select" style="margin-right: 10px;float:left;">
+                                                <select id="" class="sel_Feild word"></select>
+                                            </div>
+                                            <input class='span8 inputword' placeholder="请输入值" name="EmptyAble" type='text' />
+                                            <div class="ui-select" style="margin-right: 10px;float:left;">
+                                                <select id="" class="sel_Feild word"></select>
+                                            </div>
+                                            <input class='span8 inputword' placeholder="请输入值" name="EmptyAble" type='text' />
+                                            <a class='btn-flat small parm_clearn' style='margin-top: -5px;color:white;'>清空</a>
+                                        </div>
+                                        <div class="filter_list form4" style="display:none; min-height: 62px;padding-top: 16px;">
+                                            <h6>参数：</h6>
+                                            <div class="ui-select" style="margin-right: 20px;float:left;">
+                                                <select class="sel_Feild"></select>
+                                            </div>
+                                            <h6>查找内容：</h6>
+                                            <input class='span8' type='text' />
+                                            <h6>替换为：</h6>
+                                            <input class='span8' type='text' />
+                                        </div>
+                                        <div class="filter_list form5" style="display:none; min-height: 62px;padding-top: 16px;">
+                                            <h6>参数：</h6>
+                                            <div class="ui-select" style="margin-right: 20px;float:left;">
+                                                <select class="sel_Feild"></select>
+                                            </div>
+                                            <h6>正则表达式：</h6>
+                                            <input class='span8' type='text' />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="btn btn-default btn_cancel zc_cancelBatch" title="取消" style="float:right;">取消</span>
+                    <span class="btn btn-default btn_submit zc_Update" title="预览结果" style=" float:right;">预览结果</span>
+                    <table id="tc_reportTable2"></table>
+
+                </div>
+                <div id="zc_div_table1" class="reportTableDiv" style="height:460px;width: 98%;margin-left: 1%;">
+                    @*<h4 id="H_Title" style="width: auto;float: left;margin-top: 20px;"></h4>*@
+                    <span style="margin-right:3px;margin-left:10px;line-height:30px;" class="span_sel">已选</span>
+                    <span style="margin-right:3px;margin-left:5px;line-height:30px;" class="zcsel_count span_sel">0</span>
+                    <span style="margin-right:15px;margin-left:5px;line-height:30px;" class="span_sel">条</span>
+                    <span title="清除" style="margin-right:15px;line-height:30px;margin-left:10px;" class="span_sel zcsel_clean">清除</span>
+                    <div class="clearfix" />
+                    <br />
+                    <br />
+                    <table class="table table-hover" style="width: 1757px;">
+                        <thead>
+                            <tr>
+                                <th class="bs-checkbox "><input name="btSelectAll" type="checkbox"></th>
+                                <th style="text-align: center; vertical-align: middle; width: 50px; " data-field="" tabindex="0">序号</th>
+                                <th style="text-align: left; vertical-align: middle; " data-field="中文标题" tabindex="0"><div class="th-inner sortable both">中文标题</div><div class="fht-cell" style="width: 594px;"></div></th>
+                                <th style="text-align: left; vertical-align: middle; " data-field="发布机关" tabindex="0"><div class="th-inner sortable both">发布机关</div><div class="fht-cell" style="width: 141px;"></div></th>
+                                <th style="text-align: left; vertical-align: middle; " data-field="发文字号" tabindex="0"><div class="th-inner sortable both">发文字号</div><div class="fht-cell" style="width: 143px;"></div></th>
+                                <th style="text-align: left; vertical-align: middle; " data-field="正文" tabindex="0"><div class="th-inner sortable both">正文</div><div class="fht-cell" style="width: 515px;"></div></th>
+                                <th style="text-align: left; vertical-align: middle; width: 110px; " data-field="成文日期" tabindex="0"><div class="th-inner sortable both">成文日期</div><div class="fht-cell" style="width: 109px;"></div></th>
+                                <th style="text-align: center; vertical-align: middle; width: 150px; " data-field="" tabindex="0">
+                                    <div class="th-inner ">操作</div>
+                                    <div class="fht-cell" style="width: 149px;"></div>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <br />
+                    <table id="zc_reportTable1" style="float: right; margin-top: -40px;" class="table table-hover">
+                        <tbody>
+                            <tr data-index="0">
+                                <td class="bs-checkbox "><input data-index="0" name="btSelectItem" type="checkbox"></td>
+                                <td style="text-align: center; vertical-align: middle; width: 50px; ">1</td>
+                                <td style="text-align: left; vertical-align: middle; ">市水务局关于水文水资源中心更换地下水流量监测站点供电电池的批复</td>
+                                <td style="text-align: left; vertical-align: middle; ">天津市水务局</td>
+                                <td style="text-align: left; vertical-align: middle; ">津水资〔2017〕36号</td>
+                                <td style="text-align: left; vertical-align: middle; ">
+                                    天津市水务局文件
+                                    &nbsp;
+                                    &nbsp;
+                                    津水资〔2017〕36号
+                                    &nbsp;
+                                    &nbsp;
+
+                                    市水务局关于水文水资源中心更换
+                                    地下水...
+                                </td>
+                                <td style="text-align: left; vertical-align: middle; width: 110px; ">2017-10-09</td>
+                                <td style="text-align: center; vertical-align: middle; width: 150px; "><a style="margin-right: 15px;" onclick="zc_showDetail('E24FFD09D8D9F97949A8F958840C3D44',1)"> <i class="icon-pencil"></i>编辑</a><a onclick="zc_delSingle('E24FFD09D8D9F97949A8F958840C3D44')"><i class="icon-trash"></i>删除</a> </td>
+                            </tr>
+                            <tr data-index="1">
+                                <td class="bs-checkbox "><input data-index="1" name="btSelectItem" type="checkbox"></td>
+                                <td style="text-align: center; vertical-align: middle; width: 50px; ">2</td>
+                                <td style="text-align: left; vertical-align: middle; ">市水务局关于天津市众盈供热有限公司竖直地埋管式地源热泵项目凿井的批复</td>
+                                <td style="text-align: left; vertical-align: middle; ">天津市水务局</td>
+                                <td style="text-align: left; vertical-align: middle; ">津水审批〔2017〕99号</td>
+                                <td style="text-align: left; vertical-align: middle; ">
+                                    天津市水务局文件
+                                    &nbsp;
+                                    &nbsp;
+                                    津水审批〔2017〕99号
+                                    &nbsp;
+                                    &nbsp;
+
+                                    市水务局关于天津市众盈供热有限公司竖...
+                                </td>
+                                <td style="text-align: left; vertical-align: middle; width: 110px; "></td>
+                                <td style="text-align: center; vertical-align: middle; width: 150px; "><a style="margin-right: 15px;" onclick="zc_showDetail('94EF02E51EEC06465A46461FC160E780',1)"> <i class="icon-pencil"></i>编辑</a><a onclick="zc_delSingle('94EF02E51EEC06465A46461FC160E780')"><i class="icon-trash"></i>删除</a> </td>
+                            </tr>
+                            <tr data-index="2">
+                                <td class="bs-checkbox "><input data-index="2" name="btSelectItem" type="checkbox"></td>
+                                <td style="text-align: center; vertical-align: middle; width: 50px; ">3</td>
+                                <td style="text-align: left; vertical-align: middle; ">市水务局关于下达北大港水库35kV变电站维修改造等工程投资计划的通知</td>
+                                <td style="text-align: left; vertical-align: middle; ">天津市水务局</td>
+                                <td style="text-align: left; vertical-align: middle; ">津水计〔2017〕105号</td>
+                                <td style="text-align: left; vertical-align: middle; ">
+                                    天津市水务局文件
+                                    &nbsp;
+                                    &nbsp;
+                                    津水计〔2017〕105号
+                                    &nbsp;
+                                    &nbsp;
+
+                                    市水务局关于下达北大港水库35kV变...
+                                </td>
+                                <td style="text-align: left; vertical-align: middle; width: 110px; "></td>
+                                <td style="text-align: center; vertical-align: middle; width: 150px; "><a style="margin-right: 15px;" onclick="zc_showDetail('C292387B57A35AA81B3BF7A84D8047B2',1)"> <i class="icon-pencil"></i>编辑</a><a onclick="zc_delSingle('C292387B57A35AA81B3BF7A84D8047B2')"><i class="icon-trash"></i>删除</a> </td>
+                            </tr>
+                            <tr data-index="3">
+                                <td class="bs-checkbox "><input data-index="3" name="btSelectItem" type="checkbox"></td>
+                                <td style="text-align: center; vertical-align: middle; width: 50px; ">4</td>
+                                <td style="text-align: left; vertical-align: middle; ">市水务局关于下达2017年市管河道闸站第二批日常维修养护项目投资计划的通知</td>
+                                <td style="text-align: left; vertical-align: middle; ">天津市水务局</td>
+                                <td style="text-align: left; vertical-align: middle; ">津水计〔2017〕104号</td>
+                                <td style="text-align: left; vertical-align: middle; ">
+                                    天津市水务局文件
+                                    &nbsp;
+                                    &nbsp;
+                                    津水计〔2017〕104号
+                                    &nbsp;
+                                    &nbsp;
+
+                                    市水务局关于下达2017年市管河道闸...
+                                </td>
+                                <td style="text-align: left; vertical-align: middle; width: 110px; "></td>
+                                <td style="text-align: center; vertical-align: middle; width: 150px; "><a style="margin-right: 15px;" onclick="zc_showDetail('1DC7F914C9D78D5FE4DFA997DE955C18',1)"> <i class="icon-pencil"></i>编辑</a><a onclick="zc_delSingle('1DC7F914C9D78D5FE4DFA997DE955C18')"><i class="icon-trash"></i>删除</a> </td>
+                            </tr>
+                            <tr data-index="4">
+                                <td class="bs-checkbox "><input data-index="4" name="btSelectItem" type="checkbox"></td>
+                                <td style="text-align: center; vertical-align: middle; width: 50px; ">5</td>
+                                <td style="text-align: left; vertical-align: middle; ">市水务局关于下达2017年第二批重点水务项目补助资金的通知</td>
+                                <td style="text-align: left; vertical-align: middle; ">天津市水务局</td>
+                                <td style="text-align: left; vertical-align: middle; ">津水计〔2017〕103号</td>
+                                <td style="text-align: left; vertical-align: middle; ">
+                                    天津市水务局文件
+                                    &nbsp;
+                                    &nbsp;
+                                    津水计〔2017〕103号
+                                    &nbsp;
+                                    &nbsp;
+
+                                    市水务局关于下达2017年第二批
+                                    重...
+                                </td>
+                                <td style="text-align: left; vertical-align: middle; width: 110px; "></td>
+                                <td style="text-align: center; vertical-align: middle; width: 150px; "><a style="margin-right: 15px;" onclick="zc_showDetail('B47F766D2FCC64C20151C3790F9CA389',1)"> <i class="icon-pencil"></i>编辑</a><a onclick="zc_delSingle('B47F766D2FCC64C20151C3790F9CA389')"><i class="icon-trash"></i>删除</a> </td>
+                            </tr>
+                            <tr data-index="5">
+                                <td class="bs-checkbox "><input data-index="5" name="btSelectItem" type="checkbox"></td>
+                                <td style="text-align: center; vertical-align: middle; width: 50px; ">6</td>
+                                <td style="text-align: left; vertical-align: middle; ">市水务局关于海河处2017年第二批日常维修养护项目的批复</td>
+                                <td style="text-align: left; vertical-align: middle; ">天津市水务局</td>
+                                <td style="text-align: left; vertical-align: middle; ">津水管〔2017〕79号</td>
+                                <td style="text-align: left; vertical-align: middle; ">
+                                    天津市水务局文件
+                                    &nbsp;
+                                    &nbsp;
+                                    津水管〔2017〕79号
+                                    &nbsp;
+                                    &nbsp;
+
+                                    市水务局关于海河处2017年第二批
+                                    日...
+                                </td>
+                                <td style="text-align: left; vertical-align: middle; width: 110px; "></td>
+                                <td style="text-align: center; vertical-align: middle; width: 150px; "><a style="margin-right: 15px;" onclick="zc_showDetail('6858C97D6AD6668999DA26902E1EC554',1)"> <i class="icon-pencil"></i>编辑</a><a onclick="zc_delSingle('6858C97D6AD6668999DA26902E1EC554')"><i class="icon-trash"></i>删除</a> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="clearfix"></div>
+                </div>
+                <div style="margin-right:50px;">
+                    @{
+                        if (ViewBag.From == "Rapid")
+                        {
+                            <button type="button" class="btn-glow Release btn_jb_color">
+                                <i class="icon-bookmark"></i> 发布到产品
+                            </button>
+                            <button type="button" class="btn-glow  zc_submit btn_jb_color">
+                                <i class="icon-bookmark-empty"></i> 提交到发布列表
+                            </button>
+                        }
+                        if (ViewBag.From == "Kbase")
+                        {
+                            <button type="button" class="btn-glow btn_jb_color  Release">
+                                <i class="icon-bookmark"></i> 提交审核
+                            </button>
+                        }
+                    }
+
+                </div>
+            </div>
+        }
+        else
+        {
+            <text>@data.ToString()</text>
+        }
+    }
+</div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        // update page title
+       //$(document).attr("title", "自采");
+    });
+    $(".zc_submit").click(function () {
+        var model = new Object();
+        model.isAdd = true;
+        model.datas = ["市水务局关于下达2017年第二批重点水务项目补助资金的通知", "市水务局关于海河处2017年第二批日常维修养护项目的批复"];
+
+        $.ajax({
+            url: '@Url.Action("AddOrRemove", "Rapid")',//控制器活动,返回一个分部视图,并且给分部视图传递数据.
+            data: JSON.stringify(model),//传给服务器的数据(即后台AddUsers()方法的参数,参数类型要一致才可以)
+            type: 'POST',
+            contentType: 'application/json;charset=utf-8',//数据类型必须有
+            success: function (data) //成功后的回调方法
+            {
+                //$("#myDiv").html(data);//data--就是对应的分部视图页面内容.
+                alert(data.result)//弹出框
+            },
+            error: function (data) {
+                alert("失败:" + data[0])//弹出框
+            }
+
+        });
+    });
+</script>
+
+
+
+
